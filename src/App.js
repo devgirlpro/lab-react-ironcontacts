@@ -51,38 +51,70 @@ import contactData from "./contacts.json";
 // ];
 
 function App() {
-  const size = 5;
+  const size = 45;
   // const contactList = contactData.slice(0, size);
-  const [contacts, setContacts] = useState(contactData.slice(0, size));
+  const [contacts, setContacts] = useState(contactData.slice(15, size));
+
+  const addContact = () => {
+    const newContact =
+      contactData[Math.floor(Math.random() * contactData.length)];
+    setContacts([newContact, ...contacts]);
+  };
+
+  const sortByPopularity = () => {
+    let sortedByPopularity = contacts.slice().sort((a, b) => {
+      return a.popularity - b.popularity;
+    });
+    setContacts([...sortedByPopularity]);
+  };
+
+  const sortByName = () => {
+    let sortedByName = contacts.slice().sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
+    setContacts([...sortedByName]);
+  };
 
   return (
-    <div className="App">
-      <table>
-        <thead>
-          <tr>
-            <th>picture</th>
-            <th>name</th>
-            <th>popularity</th>
-          </tr>
-        </thead>
+    <>
+      <div className="btn">
+        <button onClick={addContact}>ADD Random Contact</button>
+        <button onClick={sortByName}>Sort by name</button>
+        <button onClick={sortByPopularity}>Sort by popularity</button>
+      </div>
 
-        {contacts.map((contact) => {
-          return (
-            <tr key={contact.id}>
-              <td>
-                <img
-                  src={contact.pictureUrl}
-                  width="200px"
-                  height="250px"
-                ></img>
-              </td>
-              <td>{contact.name}</td>
-              <td>{contact.popularity}</td>
+      <div className="App">
+        <table>
+          <thead>
+            <tr>
+              <th>picture</th>
+              <th>name</th>
+              <th>popularity</th>
+              <th>Won an Oscar</th>
+              <th>Won an Emmy</th>
             </tr>
-          );
-        })}
-      </table>
-    </div>
+          </thead>
+
+          {contacts.map((contact) => {
+            return (
+              <tr key={contact.id}>
+                <td>
+                  <img
+                    src={contact.pictureUrl}
+                    width="100px"
+                    height="150px"
+                  ></img>
+                </td>
+                <td>{contact.name}</td>
+                <td>{contact.popularity}</td>
+                <td>{contact.wonOscar ? "🏆" : ""}</td>
+                <td>{contact.wonEmmy ? "🏆" : ""}</td>
+              </tr>
+            );
+          })}
+        </table>
+      </div>
+    </>
   );
 }
 
